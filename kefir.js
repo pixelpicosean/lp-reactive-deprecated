@@ -2829,6 +2829,6 @@ game.module(
   });
 
 
-  game.Kefir = Kefir;
+  game.Reactive = game.Kefir = Kefir;
 
 });

@@ -2,7 +2,49 @@
 
 Panda Reactive is a reactive programming plugin for Panda.js with features provided by [Kefir](http://pozadi.github.io/kefir/). It's been slightly modified for better Panda.js support.
 
-## Document
+
+# Examples
+
+## Advanced Timer
+
+```javascript
+// Speed factor is also supported
+game.Timer.speedFactor = 0.5;
+
+// Emit a number every second
+var srcEvents = game.Reactive.sequentially(1000, [
+    1, 2, 3, 4, 5, 6
+]);
+// Listen to timed events (like a normal timer)
+srcEvents.onValue(function(t) {
+    console.log('- %is passed -', t);
+});
+
+// Create a new stream without events emitted at 3x seconds.
+var logStream = srcEvents.filter(function(x) {
+    return (x % 3 !== 0);
+});
+logStream.onValue(function(t) {
+    console.log('[Event]: spawned at %is', t);
+});
+
+// Create more streams.
+// Note: If a stream is not yet subscribed
+// it will not get updated so it has no cost
+// creating more streams and don't use
+var s = srcEvents.map(function(t) {
+    return t * 2;
+});
+var s1 = srcEvents.reduce(function(prev, next) {
+    return prev + next;
+});
+var s2 = srcEvents.throttle(1500);
+```
+
+More examples coming soon :D
+
+
+# Document
 
 Please see the official site of [kefir](http://pozadi.github.io/kefir/) for more details.
 
