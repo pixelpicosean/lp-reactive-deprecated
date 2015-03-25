@@ -2,7 +2,7 @@
  * Based on Kefir 1.2.0
  */
 game.module(
-  'plugins.kefir'
+  'plugins.reactive'
 )
 .body(function() { 'use strict';
 
@@ -2829,6 +2829,6 @@ game.module(
   });
 
 
-  game.Reactive = game.Kefir = Kefir;
+  game.R = game.Reactive = game.Kefir = Kefir;
 
 });

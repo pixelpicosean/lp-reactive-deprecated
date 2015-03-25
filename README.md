@@ -12,7 +12,7 @@ Panda Reactive is a reactive programming plugin for Panda.js with features provi
 game.Timer.speedFactor = 0.5;
 
 // Emit a number every second
-var srcEvents = game.Reactive.sequentially(1000, [
+var srcEvents = game.R.sequentially(1000, [
     1, 2, 3, 4, 5, 6
 ]);
 // Listen to timed events (like a normal timer)
@@ -30,8 +30,8 @@ logStream.onValue(function(t) {
 
 // Create more streams.
 // Note: If a stream is not yet subscribed
-// it will not get updated so it has no cost
-// creating more streams and don't use
+// it will not get updated. It means 
+// creating streams causes zero overhead.
 var s = srcEvents.map(function(t) {
     return t * 2;
 });
