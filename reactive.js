@@ -4,6 +4,9 @@
 game.module(
   'plugins.reactive'
 )
+.require(
+  'plugins.eventemitter'
+)
 .body(function() { 'use strict';
 
   // Use game.Timers instead of browser time functions
@@ -2827,6 +2830,30 @@ game.module(
 
   });
 
+
+  Kefir.PropertyMixin = {
+      propEvents: null,
+      enableProperty: function() {
+        this.propEvents = new game.EventEmitter();
+      },
+      createProperty: function(keyName, defaultValue) {
+        this[keyName] = this[keyName] || defaultValue;
+        return game.R.fromEvent(this.propEvents, keyName).toProperty(this[keyName]);
+      },
+
+      set: function(keyName, val) {
+        this[keyName] = val;
+        this.propEvents.emit(keyName, val);
+      },
+      incrementProperty: function(keyName, increment) {
+        this[keyName] += increment;
+        this.propEvents.emit(keyName, this[keyName]);
+      },
+      decrementProperty: function(keyName, decrement) {
+        this[keyName] -= decrement;
+        this.propEvents.emit(keyName, this[keyName]);
+      }
+  };
 
   game.R = game.Reactive = game.Kefir = Kefir;
 

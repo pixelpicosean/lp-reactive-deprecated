@@ -58,6 +58,37 @@ fullName.onValue(function(name) {
 });
 ```
 
+## Subscribe to Property Changes
+
+```javascript
+game.createClass('Player', {
+    health: 2,
+    init: function() {
+        // Make sure this is called before creating properties
+        this.enableProperty();
+
+        // This will fire an event when `health` is less than 0
+        var getKilled = this.createProperty('health').filter(function(c) {
+            return c < 0;
+        });
+        // Call `remove` when received the killed event
+        getKilled.onValue(this.remove.bind(this));
+    },
+    receiveDamage: function(damage) {
+        // Call `set`, `incrementProperty` or `decrementProperty`
+        // which will fire a property change event.
+        this.decrementProperty('health', damage);
+    },
+    remove: function() {
+        // Remove sprite, body, do whatever to clean up
+        console.log('remove from world');
+    }
+});
+
+// Remember to inject the mixin to enable property change events for 
+game.MyBox.inject(game.R.PropertyMixin);
+```
+
 More examples coming soon :D
 
 
