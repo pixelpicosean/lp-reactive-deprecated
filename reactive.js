@@ -284,9 +284,7 @@ game.module(
     return [a, b]
   }
 
-  var now = Date.now ?
-    function() { return Date.now() } :
-    function() { return new Date().getTime() };
+  var now = game.Timer.time;
 
   var log = ((typeof console !== undefined) && isFn(console.log)) ?
     function(m) {console.log(m)} :
@@ -2216,7 +2214,8 @@ game.module(
         this._send(END, null, isCurrent);
       } else {
         var $ = this;
-        setTimeout(function() {  $._send(END)  }, this._wait);
+        // Send END event in the next frame
+        setTimeout(function() {  $._send(END)  }, this._wait + game.system.delta * 1000);
       }
     }
   });
