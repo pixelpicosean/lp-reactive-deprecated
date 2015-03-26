@@ -41,6 +41,23 @@ var s1 = srcEvents.reduce(function(prev, next) {
 var s2 = srcEvents.throttle(1500);
 ```
 
+## Computed Property
+
+```javascript
+var myNameText = new game.Text('').addTo(game.scene.stage);
+
+var firstPart = game.R.sequentially(200, ['P', 'Pa', 'Pan', 'Pand', 'Panda']).toProperty('');
+var lastPart = game.R.sequentially(200, ['j', 'js']).delay(1000).toProperty('');
+
+var fullName = game.R.combine([firstPart, lastPart], function(first, last) {
+    return first + '.' + last;
+}).toProperty('');
+
+fullName.onValue(function(name) {
+    myNameText.setText(name);
+});
+```
+
 More examples coming soon :D
 
 
