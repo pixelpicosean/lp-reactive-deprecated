@@ -2197,11 +2197,13 @@ game.module(
     _init: function(args) {
       this._wait = Math.max(0, args[0]);
       this._buff = [];
+      this._lastTimer = null;
       var $ = this;
       this._$shiftBuff = function() {  $._send(VALUE, $._buff.shift())  }
     },
     _free: function() {
       this._buff = null;
+      this._lastTimer = null;
       this._$shiftBuff = null;
     },
     _handleValue: function(x, isCurrent) {
@@ -2209,7 +2211,7 @@ game.module(
         this._send(VALUE, x, isCurrent);
       } else {
         this._buff.push(x);
-        setTimeout(this._$shiftBuff, this._wait);
+        this._lastTimer = setTimeout(this._$shiftBuff, this._wait);
       }
     },
     _handleEnd: function(__, isCurrent) {
@@ -2217,8 +2219,17 @@ game.module(
         this._send(END, null, isCurrent);
       } else {
         var $ = this;
-        // Send END event in the next frame
-        setTimeout(function() {  $._send(END)  }, this._wait + game.system.delta * 1000);
+        if (this._lastTimer) {
+          var cb = this._lastTimer.callback;
+          this._lastTimer.callback = function() {
+            cb();
+            $._send(END);
+          };
+        }
+        else {
+          // Send END event in the next frame
+          setTimeout(function() {  $._send(END)  }, this._wait);
+        }
       }
     }
   });
