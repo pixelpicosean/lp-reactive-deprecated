@@ -2832,26 +2832,29 @@ game.module(
 
 
   Kefir.PropertyMixin = {
-      propEvents: null,
-      enableProperty: function() {
-        this.propEvents = new game.EventEmitter();
+      propertyEvents: null,
+      enableProperties: function() {
+        this.propertyEvents = new game.EventEmitter();
+      },
+      watchProperty: function(keyName) {
+        return game.R.fromEvent(this.propertyEvents, keyName);
       },
       createProperty: function(keyName, defaultValue) {
         this[keyName] = this[keyName] || defaultValue;
-        return game.R.fromEvent(this.propEvents, keyName).toProperty(this[keyName]);
+        return game.R.fromEvent(this.propertyEvents, keyName).toProperty(this[keyName]);
       },
 
       set: function(keyName, val) {
         this[keyName] = val;
-        this.propEvents.emit(keyName, val);
+        this.propertyEvents.emit(keyName, val);
       },
       incrementProperty: function(keyName, increment) {
         this[keyName] += increment;
-        this.propEvents.emit(keyName, this[keyName]);
+        this.propertyEvents.emit(keyName, this[keyName]);
       },
       decrementProperty: function(keyName, decrement) {
         this[keyName] -= decrement;
-        this.propEvents.emit(keyName, this[keyName]);
+        this.propertyEvents.emit(keyName, this[keyName]);
       }
   };
 
