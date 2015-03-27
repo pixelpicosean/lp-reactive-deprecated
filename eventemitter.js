@@ -7,7 +7,7 @@
  */
 
 game.module(
-  'plugins.eventemitter'
+  'plugins.reactive.eventemitter'
 )
 .body(function() { 'use strict';
 

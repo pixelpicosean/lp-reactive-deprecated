@@ -2,10 +2,10 @@
  * Based on Kefir 1.2.0
  */
 game.module(
-  'plugins.reactive'
+  'plugins.reactive.reactive'
 )
 .require(
-  'plugins.eventemitter'
+  'plugins.reactive.eventemitter'
 )
 .body(function() { 'use strict';
 
