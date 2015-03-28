@@ -585,33 +585,31 @@ game.module(
   game.EventEmitter = EventEmitter;
 
   game.Scene.inject({
-    keyEvents: null,
-    mouseEvents: null,
+    events: null,
     staticInit: function() {
-      this.keyEvents = new game.EventEmitter();
-      this.mouseEvents = new game.EventEmitter();
+      this.events = new game.EventEmitter();
       this._super();
     },
     click: function(interactionData) {
-      this.mouseEvents.emit('click', interactionData);
+      this.events.emit('click', interactionData);
     },
     mousedown: function(interactionData) {
-      this.mouseEvents.emit('mousedown', interactionData);
+      this.events.emit('mousedown', interactionData);
     },
     mouseup: function(interactionData) {
-      this.mouseEvents.emit('mouseup', interactionData);
+      this.events.emit('mouseup', interactionData);
     },
     mousemove: function(interactionData) {
-      this.mouseEvents.emit('mousemove', interactionData);
+      this.events.emit('mousemove', interactionData);
     },
     mouseout: function(interactionData) {
-      this.mouseEvents.emit('mouseout', interactionData);
+      this.events.emit('mouseout', interactionData);
     },
     keydown: function(key) {
-      this.keyEvents.emit('keydown', key);
+      this.events.emit('keydown', key);
     },
     keyup: function(key) {
-      this.keyEvents.emit('keyup', key);
+      this.events.emit('keyup', key);
     }
   });
 
