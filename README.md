@@ -9,9 +9,13 @@ Panda Reactive is a reactive programming plugin for Panda.js based on [Kefir](ht
 
 ```javascript
 game.createClass('Player', {
+    // Set default value of properties here.
+    // If you do not set it here, its value will be `undefined`.
+    health: 3,
+
     init: function() {
-        // Create `health` property
-        game.R.defineProperty(this, 'health', 3);
+        // Create observable `health` property.
+        game.R.defineProperty(this, 'health');
 
         // This will fire an event when `health` is empty
         var getKilled = this.prop.health.filter(function(c) {
@@ -84,7 +88,21 @@ var s2 = srcEvents.throttle(1500);
 
 # API Document
 
-You can find docs of most APIs in the official site of [kefir](http://pozadi.github.io/kefir/). For other APIs please see the **Examples** section.
+You can access full Kefir API from `game.R`. Check them from its [official site](http://pozadi.github.io/kefir/).
+
+
+## Extra API
+
+```javascript
+/**
+ * Create a observable property.
+ * @param  {Object} target Whose property is going to be defined.
+ * @param  {String} key    Key of the property to define
+ * @return {game.R.Property} The observable property object.
+ */
+game.R.defineProperty(target, key);
+```
+
 
 ---
 
