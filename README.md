@@ -5,6 +5,46 @@ Panda Reactive is a reactive programming plugin for Panda.js based on [Kefir](ht
 
 # Examples
 
+## Define Object Property
+
+```javascript
+game.createClass('Player', {
+    init: function() {
+        // Create `health` property
+        game.R.defineProperty(this, 'health', 3);
+
+        // This will fire an event when `health` is empty
+        var getKilled = this.prop.health.filter(function(c) {
+            return c <= 0;
+        });
+        // Call `remove` when received the killed event
+        getKilled.onValue(this.remove.bind(this));
+    },
+    receiveDamage: function(damage) {
+        // Change the health property just like what you always do
+        this.health -= damage;
+    },
+    remove: function() {
+        // Remove sprite, body, do whatever to clean up
+        console.log('Remove from world');
+    }
+});
+
+function anywhere() {
+    var player = new game.Player();
+
+    // Subscribe so that we'll get noticed whenever health changed
+    player.prop.health.onValue(function(h) {
+        console.log('Player health: %d', h);
+    });
+
+    // Let's make some blood
+    player.receiveDamage(2); // => Player health: 1
+    player.receiveDamage(1); // => Remove from world
+                             // => Player health: 0
+}
+```
+
 ## Advanced Timer
 
 ```javascript
@@ -30,7 +70,7 @@ logStream.onValue(function(t) {
 
 // Create more streams.
 // Note: If a stream is not yet subscribed
-// it will not get updated. It means 
+// it will not get updated. It means
 // creating streams causes zero overhead.
 var s = srcEvents.map(function(t) {
     return t * 2;
@@ -39,109 +79,6 @@ var s1 = srcEvents.reduce(function(prev, next) {
     return prev + next;
 });
 var s2 = srcEvents.throttle(1500);
-```
-
-## Computed Property
-
-```javascript
-var myNameText = new game.Text('').addTo(game.scene.stage);
-
-var firstPart = game.R.sequentially(200, ['P', 'Pa', 'Pan', 'Pand', 'Panda']).toProperty('');
-var lastPart = game.R.sequentially(200, ['j', 'js']).delay(1000).toProperty('');
-
-var fullName = game.R.combine([firstPart, lastPart], function(first, last) {
-    return first + '.' + last;
-}).toProperty('');
-
-fullName.onValue(function(name) {
-    myNameText.setText(name);
-});
-```
-
-## Subscribe to Property Changes
-
-```javascript
-game.createClass('Player', {
-    health: 2,
-    init: function() {
-        // Make sure this is called before creating properties
-        this.enableProperties();
-
-        // This will fire an event when `health` is less than 0
-        var getKilled = this.createProperty('health').filter(function(c) {
-            return c < 0;
-        });
-        // Call `remove` when received the killed event
-        getKilled.onValue(this.remove.bind(this));
-    },
-    receiveDamage: function(damage) {
-        // Call `set`, `incrementProperty` or `decrementProperty`
-        // which will fire a property change event.
-        this.decrementProperty('health', damage);
-    },
-    remove: function() {
-        // Remove sprite, body, do whatever to clean up
-        console.log('remove from world');
-    }
-});
-
-// Remember to inject the mixin to enable property change events for 
-game.MyBox.inject(game.R.PropertyMixin);
-```
-
-
-## Input Stream
-
-```javascript
-// Player will move 32px(up/down/left/right) each step
-var STEP_DISTANCE = 32;
-
-game.createScene('MyScene', {
-    init: function() {
-        // Create your player
-        var player = /*...*/;
-
-        // Scene has a property named "events" which is a 
-        // EventEmitter instance. It'll emit all Panda.js
-        // supported input events(keydown, mousedown...)
-        var keydown = game.R.fromEvent(this.events, 'keydown');
-
-        // Logic below ONLY happens when any key is pressed
-        var whenToMoveLeft = keydown
-            // Create a LEFT down event stream
-            .filter(function(key) {
-                return key === 'LEFT';
-            })
-            // "Translate" LEFT event to "move ONE step left"
-            .map(function() {
-                return { 
-                    x: -1,
-                    y: 0 
-                };
-            });
-        
-        // Also define logic for other 3 directions
-        // - whenToMoveRight
-        // - whenToMoveUp
-        // - whenToMoveDown
-
-        // Now lets combine them all
-        var whenToMove = game.R.combine([
-            whenToMoveLeft, 
-            whenToMoveRight, 
-            whenToMoveUp, 
-            whenToMoveDown 
-        ]);
-        // And move our player
-        whenToMove.onValue(function(direction) {
-            player.position.x += direction.x * STEP_DISTANCE;
-            player.position.y += direction.y * STEP_DISTANCE;
-        });
-
-        // That's it! 
-        // Without any useless `update` code and it works well.
-    }
-});
 ```
 
 

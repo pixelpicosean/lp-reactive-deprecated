@@ -2,6 +2,7 @@
  * Based on Kefir v2.0.0
  */
 game.module(
+  'plugins.reactive'
 )
 .body(function() { 'use strict';
 
@@ -3181,33 +3182,35 @@ game.module(
   });
 
 
-  Kefir.PropertyMixin = {
-      propertyEvents: null,
-      enableProperties: function() {
-        this.propertyEvents = new game.EventEmitter();
-      },
-      watchProperty: function(keyName) {
-        return game.R.fromEvent(this.propertyEvents, keyName);
-      },
-      createProperty: function(keyName, defaultValue) {
-        this[keyName] = this[keyName] || defaultValue;
-        return game.R.fromEvent(this.propertyEvents, keyName).toProperty(this[keyName]);
-      },
+  Kefir.defineProperty = function(target, name, defaultValue) {
+      var value = defaultValue;
+      var emitter;
 
-      set: function(keyName, val) {
-        this[keyName] = val;
-        this.propertyEvents.emit(keyName, val);
-      },
-      incrementProperty: function(keyName, increment) {
-        this[keyName] += increment;
-        this.propertyEvents.emit(keyName, this[keyName]);
-      },
-      decrementProperty: function(keyName, decrement) {
-        this[keyName] -= decrement;
-        this.propertyEvents.emit(keyName, this[keyName]);
-      }
-  };
+      // Create a Kefir property
+      var prop = game.R.stream(function(e) {
+          emitter = e;
+      }).toProperty(function() {
+          return defaultValue;
+      });
 
-  game.R = game.Reactive = game.Kefir = Kefir;
+      // Save the property to target.prop
+      target.prop || (target.prop = {});
+      target.prop[name] = prop;
+
+      // Define the REAL property for target
+      Object.defineProperty(target, name, {
+          set: function(newValue) {
+              value = newValue;
+              emitter.emit(value);
+          },
+          get: function() {
+              return value;
+          }
+      });
+
+      return prop;
+  }
+
+  game.R = Kefir;
 
 });
