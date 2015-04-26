@@ -1087,7 +1087,11 @@ game.module(
       this._bindedEndHandlers.push({obs: obs, handler: onEnd});
 
       obs.onAny(this._$handleSubAny);
-      obs.onEnd(onEnd);
+
+      // it can become inactive in responce of subscribing to `obs.onAny` above
+      if (this._active) {
+        obs.onEnd(onEnd);
+      }
     },
     _unsubscribe: function(obs) {
       obs.offAny(this._$handleSubAny);
