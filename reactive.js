@@ -302,7 +302,9 @@ game.module(
     return true;
   }
 
-  var now = game.Timer.time;
+  var now = function() {
+    return game.Timer.time;
+  };
 
   var log = ((typeof console !== undefined) && isFn(console.log)) ?
     function(m) {
