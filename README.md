@@ -79,10 +79,8 @@ logStream.onValue(function(t) {
 var s = srcEvents.map(function(t) {
     return t * 2;
 });
-var s1 = srcEvents.reduce(function(prev, next) {
-    return prev + next;
-});
-var s2 = srcEvents.throttle(1500);
+var s1 = srcEvents.debounce(100);
+var s2 = s1.throttle(1500);
 ```
 
 
