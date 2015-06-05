@@ -4959,4 +4959,60 @@ game.module(
     return prop;
   }
 
+  /**
+   * Create an reactive variable.
+   *
+   * Example:
+   *   // Create with a initial value
+   *   var x = game.R.variable(10);
+   *
+   *   // Modify value of this variable
+   *   x(20)(30)(40)(50);
+   *
+   *   // Use it as getter
+   *   x() === 50; // => true
+   *
+   *   // Listen to its changes
+   *   x.onValue(function(x) {
+   *     console.log('x changed to %d', x);
+   *   });
+   *
+   * @param  {*} value Initial value
+   * @return {Function} A function can be used as getter or setter
+   */
+  game.R.variable = function(value) {
+    var emitter;
+    var prop = Kefir.stream(function(e) {
+      emitter = e;
+    }).toProperty();
+
+    var foo = function(newVal) {
+      if (arguments.length === 0) {
+        return foo.val;
+      }
+      else {
+        foo.val = newVal;
+        emitter && emitter.emit(foo.val);
+      }
+    };
+
+    foo.val = value;
+    foo.prop = prop;
+
+    foo.onValue = function(f) {
+      prop.onValue(f);
+    };
+    foo.offValue = function(f) {
+      prop.offValue(f);
+    };
+    foo.log = function() {
+      prop.log();
+    };
+    foo.offLog = function() {
+      prop.offLog();
+    };
+
+    return foo;
+  }
+
 });
