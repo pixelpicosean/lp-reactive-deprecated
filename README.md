@@ -49,6 +49,28 @@ function anywhere() {
 }
 ```
 
+## Create Reactive Variable
+
+```javascript
+// Create a new variable with init value 0
+var myScore = game.R.variable(0);
+
+// Get current value
+console.log(myScore()); // => 0
+
+// Set new value
+myScore(10);
+myScore(myScore() + 10);
+myScore(30)(40);
+
+// Listen to its changes
+myScore.onValue(function(v) {
+    if (v > 100) {
+        console.log('You Win!');
+    }
+});
+```
+
 ## Advanced Timer
 
 ```javascript
@@ -99,6 +121,13 @@ You can access full Kefir API from `game.R`. Check them from its [official site]
  * @return {game.R.Property} The observable property object.
  */
 game.R.defineProperty(target, key);
+
+/**
+ * Create an reactive variable.
+ * @param  {*} value Initial value
+ * @return {Function} A function can be used as getter or setter
+ */
+game.R.variable(value);
 ```
 
 
