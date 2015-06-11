@@ -5063,7 +5063,7 @@ game.module(
    */
   game.R.variable = function(value) {
     var emitter;
-    var prop = Kefir.stream(function(e) {
+    var prop = game.R.stream(function(e) {
       emitter = e;
       return function() {
         emitter = null;
