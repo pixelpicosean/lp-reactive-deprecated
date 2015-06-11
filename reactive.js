@@ -5065,6 +5065,9 @@ game.module(
     var emitter;
     var prop = Kefir.stream(function(e) {
       emitter = e;
+      return function() {
+        emitter = null;
+      };
     }).toProperty();
 
     var foo = function(newVal) {
