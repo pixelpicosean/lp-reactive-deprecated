@@ -5068,7 +5068,9 @@ game.module(
       return function() {
         emitter = null;
       };
-    }).toProperty();
+    }).toProperty(function() {
+      return value;
+    });
 
     var foo = function(newVal) {
       if (arguments.length === 0) {
