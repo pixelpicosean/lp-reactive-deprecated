@@ -5,54 +5,10 @@ Panda Reactive is a reactive programming plugin for Panda.js based on [Kefir](ht
 
 # Examples
 
-## Define Object Property
+## Reactive Variable
 
 ```javascript
-game.createClass('Player', {
-    // Set default value of properties here.
-    // If you do not set it here, its value will be `undefined`.
-    health: 3,
-
-    init: function() {
-        // Create observable `health` property.
-        game.R.defineProperty(this, 'health');
-
-        // This will fire an event when `health` is empty
-        var getKilled = this.prop.health.filter(function(c) {
-            return c <= 0;
-        });
-        // Call `remove` when received the killed event
-        getKilled.onValue(this.remove.bind(this));
-    },
-    receiveDamage: function(damage) {
-        // Change the health property just like what you always do
-        this.health -= damage;
-    },
-    remove: function() {
-        // Remove sprite, body, do whatever to clean up
-        console.log('Remove from world');
-    }
-});
-
-function anywhere() {
-    var player = new game.Player();
-
-    // Subscribe so that we'll get noticed whenever health changed
-    player.prop.health.onValue(function(h) {
-        console.log('Player health: %d', h);
-    });
-
-    // Let's make some blood
-    player.receiveDamage(2); // => Player health: 1
-    player.receiveDamage(1); // => Remove from world
-                             // => Player health: 0
-}
-```
-
-## Create Reactive Variable
-
-```javascript
-// Create a new variable with init value 0
+// Create a variable with default value 0
 var myScore = game.R.variable(0);
 
 // Get current value
@@ -69,6 +25,13 @@ myScore.onValue(function(v) {
         console.log('You Win!');
     }
 });
+
+// You can get its inner reactive property
+// And do whatever you want since it's a "Property"
+myScore.prop.filter(function(v) {
+    return v > 0;
+})
+.take(5);
 ```
 
 ## Advanced Timer
@@ -115,15 +78,7 @@ You can access full Kefir API from `game.R`. Check them from its [official site]
 
 ```javascript
 /**
- * Create a observable property.
- * @param  {Object} target Whose property is going to be defined.
- * @param  {String} key    Key of the property to define
- * @return {game.R.Property} The observable property object.
- */
-game.R.defineProperty(target, key);
-
-/**
- * Create an reactive variable.
+ * Create a variable.
  * @param  {*} value Initial value
  * @return {Function} A function can be used as getter or setter
  */
