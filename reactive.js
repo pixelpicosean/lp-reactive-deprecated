@@ -5086,16 +5086,16 @@ game.module(
     foo.prop = prop;
 
     foo.onValue = function(f) {
-      prop.onValue(f);
+      return prop.onValue(f);
     };
     foo.offValue = function(f) {
-      prop.offValue(f);
+      return prop.offValue(f);
     };
     foo.log = function() {
-      prop.log();
+      return prop.log();
     };
     foo.offLog = function() {
-      prop.offLog();
+      return prop.offLog();
     };
 
     return foo;
