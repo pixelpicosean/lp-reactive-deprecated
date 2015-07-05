@@ -5079,6 +5079,7 @@ game.module(
       else {
         foo.val = newVal;
         emitter && emitter.emit(foo.val);
+        return foo.val;
       }
     };
 
