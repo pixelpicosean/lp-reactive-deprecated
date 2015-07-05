@@ -5091,11 +5091,11 @@ game.module(
     foo.offValue = function(f) {
       return prop.offValue(f);
     };
-    foo.log = function() {
-      return prop.log();
+    foo.log = function(param) {
+      return prop.log(param);
     };
-    foo.offLog = function() {
-      return prop.offLog();
+    foo.offLog = function(param) {
+      return prop.offLog(param);
     };
 
     return foo;
