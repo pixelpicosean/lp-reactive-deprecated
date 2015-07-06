@@ -12,12 +12,11 @@ Panda Reactive is a reactive programming plugin for Panda.js based on [Kefir](ht
 var myScore = game.R.variable(0);
 
 // Get current value
-console.log(myScore()); // => 0
+console.log(myScore.value); // => 0
 
 // Set new value
-myScore(10);
-myScore(myScore() + 10);
-myScore(30)(40);
+myScore.value = 10;
+myScore.value += 10;
 
 // Listen to its changes
 myScore.onValue(function(v) {
@@ -26,9 +25,8 @@ myScore.onValue(function(v) {
     }
 });
 
-// You can get its inner reactive property
-// And do whatever you want since it's a "Property"
-myScore.prop.filter(function(v) {
+// You can do whatever you want since it's a "Property"
+myScore.filter(function(v) {
     return v > 0;
 })
 .take(5);
@@ -80,10 +78,17 @@ You can access full Kefir API from `game.R`. Check them from its [official site]
 /**
  * Create a variable.
  * @param  {*} value Initial value
- * @return {Function} A function can be used as getter or setter
+ * @return {game.R.Property} A property that you can easily get/set its current value
  */
 game.R.variable(value);
 ```
+
+# ChangeLog
+
+## 0.2.0
+
+- Kefir updated to v2.7.0
+- `game.R.variable` now is a `Property`, and use `value` to set/get instead of function calls
 
 
 ---
