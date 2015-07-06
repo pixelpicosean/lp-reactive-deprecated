@@ -718,7 +718,7 @@ game.module(
     },
 
     setName: function setName(sourceObs, /* optional */selfName) {
-      this._name = selfName ? '' + sourceObs._name + '.' + selfName : sourceObs;
+      this._name = selfName ? sourceObs._name + '.' + selfName : sourceObs;
       return this;
     },
 
@@ -726,7 +726,7 @@ game.module(
       var name = arguments[0] === undefined ? this.toString() : arguments[0];
 
       var handler = function handler(event) {
-        var type = '<' + event.type + '' + (event.current ? ':current' : '') + '>';
+        var type = '<' + event.type + (event.current ? ':current' : '') + '>';
         if (event.type === END) {
           console.log(name, type);
         } else {
@@ -773,7 +773,7 @@ game.module(
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
   "use strict";
 
@@ -810,7 +810,7 @@ game.module(
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
   'use strict';
 
@@ -883,7 +883,7 @@ game.module(
 
 /***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
   "use strict";
 
@@ -1395,7 +1395,7 @@ game.module(
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
   "use strict";
 
@@ -1593,7 +1593,7 @@ game.module(
 
 /***/ },
 /* 21 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
   "use strict";
 
@@ -1822,7 +1822,7 @@ game.module(
 
       BaseClass.call(this);
       this._source = source;
-      this._name = '' + source._name + '.' + name;
+      this._name = source._name + '.' + name;
       this._init(options);
       this._$handleAny = function (event) {
         return _this._handleAny(event);
@@ -1920,7 +1920,7 @@ game.module(
 
 /***/ },
 /* 28 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
   'use strict';
 
@@ -2628,7 +2628,7 @@ game.module(
 
 /***/ },
 /* 42 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
   "use strict";
 
@@ -3444,8 +3444,8 @@ game.module(
 
   });
 
-  module.exports = function combine(active, _x, combinator) {
-    var passive = arguments[1] === undefined ? [] : arguments[1];
+  module.exports = function combine(active, passive, combinator) {
+    if (passive === undefined) passive = [];
 
     if (typeof passive === 'function') {
       combinator = passive;
@@ -4212,7 +4212,7 @@ game.module(
       BaseClass.call(this);
       this._primary = primary;
       this._secondary = secondary;
-      this._name = '' + primary._name + '.' + name;
+      this._name = primary._name + '.' + name;
       this._lastSecondary = NOTHING;
       this._$handleSecondaryAny = function (event) {
         return _this._handleSecondaryAny(event);
@@ -4495,9 +4495,12 @@ game.module(
 
       var _ref$flushOnEnd = _ref.flushOnEnd;
       var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
+      var _ref$flushOnChange = _ref.flushOnChange;
+      var flushOnChange = _ref$flushOnChange === undefined ? false : _ref$flushOnChange;
 
       this._buff = [];
       this._flushOnEnd = flushOnEnd;
+      this._flushOnChange = flushOnChange;
     },
 
     _free: function _free() {
@@ -4529,6 +4532,15 @@ game.module(
       if (!this._flushOnEnd && (this._lastSecondary === NOTHING || this._lastSecondary)) {
         this._emitEnd();
       }
+    },
+
+    _handleSecondaryValue: function _handleSecondaryValue(x) {
+      if (this._flushOnChange && !x) {
+        this._flush();
+      }
+
+      // from default _handleSecondaryValue
+      this._lastSecondary = x;
     }
 
   };
