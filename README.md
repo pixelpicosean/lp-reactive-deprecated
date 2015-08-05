@@ -1,6 +1,6 @@
-# Panda Reactive
+# Reactive for LesserPanda
 
-Panda Reactive is a reactive programming plugin for Panda.js based on [Kefir](http://pozadi.github.io/kefir/).
+Reactive is a reactive programming plugin for LesserPanda engine based on [Kefir](http://pozadi.github.io/kefir/).
 
 
 # Examples

@@ -1,6 +1,7 @@
 /**
- * Panda Reactive Plugin
+ * LesserPanda Reactive Plugin
  * @version 0.2.0
+ * @author Sean Bohan
  *
  * Based on Kefir.js v2.7.0
  *  https://github.com/rpominov/kefir
