@@ -5063,8 +5063,10 @@ game.module(
         return currValue;
       },
       set: function(newValue) {
-        currValue = newValue;
-        emitter && emitter.emit(currValue);
+        if (newValue !== currValue) {
+          currValue = newValue;
+          emitter && emitter.emit(currValue);
+        }
       }
     });
 
