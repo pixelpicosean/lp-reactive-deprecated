@@ -21,41 +21,6 @@ game.module(
   // Compiled source goes here
 
   /**
-   * Create a observable property.
-   * @param  {Object} target Whose property is going to be defined.
-   * @param  {String} key    Key of the property to define
-   * @return {game.R.Property} The observable property object.
-   */
-  game.R.defineProperty = function(target, key) {
-    var value = target[key];
-    var emitter;
-
-    // Create a Kefir property
-    var prop = game.R.stream(function(e) {
-      emitter = e;
-    }).toProperty(function() {
-      return value;
-    });
-
-    // Save the property to target.prop
-    target.prop || (target.prop = {});
-    target.prop[key] = prop;
-
-    // Define the REAL property for target
-    Object.defineProperty(target, key, {
-      set: function(newValue) {
-        value = newValue;
-        emitter && emitter.emit(value);
-      },
-      get: function() {
-        return value;
-      }
-    });
-
-    return prop;
-  }
-
-  /**
    * Create an reactive variable.
    *
    * Example:
@@ -63,10 +28,12 @@ game.module(
    *   var x = game.R.variable(10);
    *
    *   // Modify value of this variable
-   *   x(20)(30)(40)(50);
+   *   x.value = 20;
+   *   x.value = 30;
+   *   x.value = 40;
    *
    *   // Use it as getter
-   *   x() === 50; // => true
+   *   x.value === 50; // => true
    *
    *   // Listen to its changes
    *   x.onValue(function(x) {
@@ -78,37 +45,30 @@ game.module(
    */
   game.R.variable = function(value) {
     var emitter;
-    var prop = Kefir.stream(function(e) {
+    var currValue = value;
+
+    var prop = game.R.stream(function(e) {
       emitter = e;
-    }).toProperty();
+      return function() {
+        emitter = null;
+      };
+    }).toProperty(function() {
+      return value;
+    });
 
-    var foo = function(newVal) {
-      if (arguments.length === 0) {
-        return foo.val;
+    Object.defineProperty(prop, 'value', {
+      get: function() {
+        return currValue;
+      },
+      set: function(newValue) {
+        if (newValue !== currValue) {
+          currValue = newValue;
+          emitter && emitter.emit(currValue);
+        }
       }
-      else {
-        foo.val = newVal;
-        emitter && emitter.emit(foo.val);
-      }
-    };
+    });
 
-    foo.val = value;
-    foo.prop = prop;
-
-    foo.onValue = function(f) {
-      prop.onValue(f);
-    };
-    foo.offValue = function(f) {
-      prop.offValue(f);
-    };
-    foo.log = function() {
-      prop.log();
-    };
-    foo.offLog = function() {
-      prop.offLog();
-    };
-
-    return foo;
+    return prop;
   }
 
 });
