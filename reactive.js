@@ -5085,7 +5085,7 @@ game.module(
    * @param  {*} value Initial value
    * @return {Function} A function can be used as getter or setter
    */
-  game.R.variable = function(value) {
+  function variable(value) {
     var emitter;
     var currValue = value;
 
@@ -5112,5 +5112,11 @@ game.module(
 
     return prop;
   }
+  game.R.variable = variable;
+
+  function fromUpdate() {
+    return game.R.fromEvents(game.scene, 'update');
+  }
+  game.R.fromUpdate = fromUpdate;
 
 });
