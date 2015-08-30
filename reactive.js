@@ -5119,4 +5119,13 @@ game.module(
   }
   game.R.fromUpdate = fromUpdate;
 
+  function nextFrame() {
+    return game.R.fromEvents(game.scene, 'update').take(1);
+  }
+  game.R.nextFrame = nextFrame;
+
+  function laterFrame(number) {
+    return game.R.fromEvents(game.scene, 'update').skip(number);
+  }
+
 });
