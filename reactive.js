@@ -1,6 +1,6 @@
 /**
  * LesserPanda Reactive Plugin
- * @version 0.2.1
+ * @version 0.2.2
  * @author Sean Bohan
  *
  * Based on Kefir.js v2.8.0

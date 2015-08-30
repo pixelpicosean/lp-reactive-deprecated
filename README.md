@@ -81,11 +81,37 @@ You can access full Kefir API from `game.R`. Check them from its [official site]
  * @return {game.R.Property} A property that you can easily get/set its current value
  */
 game.R.variable(value);
+
+/**
+ * Create a stream which will emit tick number every frame
+ */
+game.R.fromUpdate();
+
+/**
+ * Create a stream which will emit next frame
+ */
+game.R.nextFrame();
+
+/**
+ * Create a stream which will emit some frames later
+ * @param {Number} how_many_frames_later
+ */
+game.R.laterFrame(how_many_frames_later);
 ```
 
 # ChangeLog
 
-## 0.2.0
+## v0.2.2
+
+- New stream creating method `fromUpdate`: emits every frame
+- New stream creating method `nextFrame`: emits only in next frame
+- New stream creating method `laterFrame`: emits after some frames
+
+## v0.2.1
+
+- Kefir updated to v2.8.0
+
+## v0.2.0
 
 - Kefir updated to v2.7.0
 - `game.R.variable` now is a `Property`, and use `value` to set/get instead of function calls
