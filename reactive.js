@@ -5095,7 +5095,7 @@ game.module(
         emitter = null;
       };
     }).toProperty(function() {
-      return value;
+      return currValue;
     });
 
     Object.defineProperty(prop, 'value', {
