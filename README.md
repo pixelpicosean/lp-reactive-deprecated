@@ -1,4 +1,6 @@
-# Reactive for LesserPanda
+# Reactive for LesserPanda (Deprecated)
+
+**Reactive is part of LesserPanda engine now!**
 
 Reactive is a reactive programming plugin for LesserPanda engine based on [Kefir](http://pozadi.github.io/kefir/).
 
